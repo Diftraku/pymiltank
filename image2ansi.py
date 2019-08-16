@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 import argparse
-from PIL import Image
-from textwrap import dedent
 import math
+from textwrap import dedent
+
+from PIL import Image
 from x256 import x256
 
 # Maximum width for the output in columns
 OUTPUT_MAX_WIDTH = 80
 ANSI_RESET = '\x1b[0m'
 
-def convert_png(file):
+
+def convert_to_ansi(file):
     image = Image.open(file)
     image = image.convert('RGBA')
     output = ''
@@ -46,4 +48,4 @@ if __name__ == "__main__":
         epilog='Note: Works best for relatively low-resolution images (Pokemon party/pokedex list sprites work really well)')
     parser.add_argument('file', type=argparse.FileType('rb'), help='path to file to convert')
     args = parser.parse_args()
-    convert_png(args.file)
+    convert_to_ansi(args.file)
