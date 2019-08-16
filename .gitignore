@@ -1,0 +1,5 @@
+# Ignore VS Code project folder
+.vscode
+
+# Ignore virtualenv
+.pyenv
