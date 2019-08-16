@@ -44,7 +44,7 @@ def convert_to_ansi(file):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='Convert a PNG image into a series of "pixels" using ANSI-escape codes',
+        description='Convert any image format supported by pillow into a series of "pixels" using ANSI-escape codes',
         epilog='Note: Works best for relatively low-resolution images (Pokemon party/pokedex list sprites work really well)')
     parser.add_argument('file', type=argparse.FileType('rb'), help='path to file to convert')
     args = parser.parse_args()
