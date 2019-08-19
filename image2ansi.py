@@ -24,21 +24,28 @@ def convert_to_ansi(file):
     # print("Relative pixel size:", dx, dy)
     # print(image.mode)
 
-    # Read pixels from the image, incrementing by relative pixel size
+    # Start reading the image pixel-by-pixel, incrementing by the relative pixel size
+    # We decrement the width by a single relative pixel size
+    # to prevent reading out-of-bounds of the image.
     x, y = 0, 0
     while y < math.floor(image.height - dy):
         while x < math.floor(image.width - dx):
             x += dx
             pixel = image.getpixel((x, y))
             if pixel[3] > 0:
+                # @TODO Refactor x256 core bits into a single file?
                 ansi_colour = '\x1b[48;5;' + str(x256.from_rgb(pixel[0], pixel[1], pixel[2])) + 'm'
                 output += f'{ansi_colour} {ANSI_RESET}'
             else:
                 output += f' {ANSI_RESET}'
-        # Reset after every row and force newline
+
+        # Start the next round on the next row
         x, y = 0, y + dy
+
+        # Insert a newline in the output
         output = f"{output}{ANSI_RESET} \r\n"
-    # Dump the resulting "file"
+
+    # Print output to stdout
     print(output)
 
 
