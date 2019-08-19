@@ -3,3 +3,6 @@
 
 # Ignore virtualenv
 .pyenv
+
+# External assets
+assets/
