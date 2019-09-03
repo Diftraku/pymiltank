@@ -11,8 +11,8 @@ OUTPUT_MAX_WIDTH = 80
 ANSI_RESET = '\x1b[0m'
 
 
-def convert_to_ansi(file):
-    image = Image.open(file)
+def convert_to_ansi(input_stream, output_stream):
+    image = Image.open(input_stream)
     image = image.convert('RGBA')
     output = ''
 
@@ -39,20 +39,23 @@ def convert_to_ansi(file):
             else:
                 output += f' {ANSI_RESET}'
 
-        # Start the next round on the next row
+        # Next vertical row, reset horizontal index to 0
         x, y = 0, y + dy
 
-        # Insert a newline in the output
+        # Reset colors and force new row
         output = f"{output}{ANSI_RESET} \r\n"
 
     # Print output to stdout
-    print(output)
+    output_stream.write(output)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Convert any image format supported by pillow into a series of "pixels" using ANSI-escape codes',
         epilog='Note: Works best for relatively low-resolution images (Pokemon party/pokedex list sprites work really well)')
-    parser.add_argument('file', type=argparse.FileType('rb'), help='path to file to convert')
+    parser.add_argument('input', type=argparse.FileType('rb'),
+                        help='input file to convert', default='-')
+    parser.add_argument('-o', '--output', type=argparse.FileType('w'),
+                        help='output file/stream', default='-')
     args = parser.parse_args()
-    convert_to_ansi(args.file)
+    convert_to_ansi(args.input, args.output)
